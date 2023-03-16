@@ -7,9 +7,23 @@ class ProductionsController < ApplicationController
   def show
     production = Production.find_by(id: params[:id])
     if production
-      render json: production, status: :ok
+      # using except to create a custom render
+      render json: production, except: [:id, :created_at, :updated_at], methods: [:title_director], status: :ok
+
+      # using only to create a cutom render
+      # render json: production, only: [:title, :genre, :budget, :image, :director, :ongoing], status: :ok
+
+      # creating a custom render manually
+      # render json: {
+      #   title: production.title,
+      #   genre: production.genre,
+      #   budget: production.budget,
+      #   image: production.image,
+      #   director: production.director,
+      #   ongoing: production.ongoing,
+      #   }, status: :ok # creating our custom render here
     else
-      render json: {error: "production not found"}, status: :not_found
+      render json: { error: "production not found" }, status: :not_found
     end
   end
 
